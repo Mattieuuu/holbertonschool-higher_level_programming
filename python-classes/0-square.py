@@ -3,6 +3,7 @@
 Module for Class Square
 '''
 
+
 class Square:
     '''Class Square'''
     pass
