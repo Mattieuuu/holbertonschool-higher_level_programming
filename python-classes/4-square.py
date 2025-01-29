@@ -7,7 +7,7 @@ Module for Class Square
 class Square:
     '''Class Square'''
     def __init__(self, size=0):
-        pass
+        self.__set_size(size)
 
     def __set_size(self, value):
         if not isinstance(value, int):
