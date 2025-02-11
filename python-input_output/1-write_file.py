@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+'''write a file'''
+
 
 def write_file(filename="", text=""):
     # Ouvre le fichier en mode écriture ('w'), cela écrase le contenu existant ou crée le fichier si nécessaire
