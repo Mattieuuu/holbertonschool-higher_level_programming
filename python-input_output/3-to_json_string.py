@@ -1,7 +1,10 @@
 #!/usr/bin/python3
+'''import my object to json file
+'''
+
 
 import json
 
 def to_json_string(my_obj):
-    # Utilise la fonction 'dumps' du module json pour convertir l'objet en chaîne JSON
+    """returns a json representation of an object"""
     return json.dumps(my_obj)
