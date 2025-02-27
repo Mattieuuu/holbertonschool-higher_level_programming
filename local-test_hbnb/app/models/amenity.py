@@ -1,8 +1,13 @@
-from app.models.amenity import Amenity
+from .base_model import BaseModel
 
-def test_amenity_creation():
-    amenity = Amenity(name="Wi-Fi")
-    assert amenity.name == "Wi-Fi"
-    print("Amenity creation test passed!")
+class Amenity(BaseModel):
+    def __init__(self, name):
+        super().__init__()
+        self.name = name
+        self.validate()
 
-test_amenity_creation()
+    def validate(self):
+        if not isinstance(self.name, str) or not self.name:
+            raise ValueError("Name must be a non-empty string")
+        if len(self.name) > 50:
+            raise ValueError("Name must be 50 characters or less")
