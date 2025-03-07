@@ -1,49 +1,32 @@
 #!/usr/bin/python3
 """
-Script that lists all states from the database.
+Script that lists all states with a name starting with 'N' from the database.
 """
 import MySQLdb
 import sys
 
-def connectBDD(user, password, BDD_name):
-    """
-    Establishes a connection to the MySQL database.
-
-    This function connects to a MySQL database using the provided credentials
-    (username, password, and database name).
-
-    Args:
-        user (str): Username to connect to the database.
-        password (str): Password associated with the username.
-        BDD_name (str): Name of the database to connect to.
-
-    Returns:
-        MySQLdb.connect: A MySQL database connection object.
-    """
-    connect = MySQLdb.connect(
+if __name__ == "__main__":
+    # Connexion à la base de données MySQL
+    db = MySQLdb.connect(
         host="localhost",
-        user=user,
-        password=password,
-        db=BDD_name,
         port=3306,
+        user=sys.argv[1],
+        passwd=sys.argv[2],
+        db=sys.argv[3],
         charset="utf8"
     )
-    return connect
 
-# Get command line arguments
-if __name__== "__main__":
-    user = sys.argv[1]
-    password = sys.argv[2]
-    BDD_name = sys.argv[3]
+    # Création d'un curseur pour exécuter des requêtes SQL
+    cur = db.cursor()
 
-connect = connectBDD(user, password, BDD_name)
-# Create cursor to execute SQL query
-cursor = connect.cursor()
-cursor.execute("SELECT * FROM states ORDER BY states.id ASC")
-# Fetch and display all rows from the query
-query_rows = cursor.fetchall()
-for row in query_rows:
-    print(row)
-# Close cursor and database connection
-cursor.close()
-connect.close()
+    # Exécution de la requête SQL pour récupérer les états commençant par 'N'
+    cur.execute("SELECT * FROM states WHERE name LIKE 'N%' ORDER BY id ASC")
+
+    # Récupération et affichage des résultats
+    rows = cur.fetchall()
+    for row in rows:
+        print(row)
+
+    # Fermeture du curseur et de la connexion à la base de données
+    cur.close()
+    db.close()
