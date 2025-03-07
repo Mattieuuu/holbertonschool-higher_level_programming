@@ -1,13 +1,15 @@
 #!/usr/bin/python3
 """
-Updates the name of the State object with id = 2 to 'New Mexico'
-in the database hbtn_0e_6_usa.
+Lists all City objects from the database hbtn_0e_14_usa,
+sorted by cities.id, displaying them in the format:
+<state name>: (<city id>) <city name>
 """
 
 import sys
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from model_state import Base, State
+from model_city import City
 
 if __name__ == "__main__":
     # Create the database engine
@@ -18,12 +20,12 @@ if __name__ == "__main__":
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    # Query the state with id = 2
-    state = session.query(State).filter_by(id=2).first()
+    # Query all cities with their state names, ordered by city.id
+    results = session.query(City, State).join(State).order_by(City.id).all()
 
-    if state:
-        state.name = "New Mexico"  # Update the name
-        session.commit()  # Save changes
+    # Print results in the required format
+    for city, state in results:
+        print("{}: ({}) {}".format(state.name, city.id, city.name))
 
     # Close session
     session.close()
