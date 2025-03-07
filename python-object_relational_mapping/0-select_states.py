@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Script qui liste tous les états depuis la base de données hbtn_0e_0_usa"""
 
+
 import MySQLdb
 import sys
 
