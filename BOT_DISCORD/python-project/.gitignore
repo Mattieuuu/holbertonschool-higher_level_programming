@@ -1,0 +1,8 @@
+# Fichiers sensibles
+bot_token.txt
+__pycache__/
+*.pyc
+
+# Environnement virtuel
+venv/
+env/
