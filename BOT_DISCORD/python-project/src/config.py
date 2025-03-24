@@ -13,7 +13,7 @@ import discord
 # Remplacer VOTRE_ID_DISCORD par votre vrai ID Discord
 # Pour obtenir votre ID: Activer le mode développeur dans Discord
 # Clic droit sur votre nom -> Copier l'identifiant
-AUTHORIZED_USER_ID = solairefullautiste  # Mettez votre vrai ID ici
+AUTHORIZED_USER_ID = 1234567890  # L'ID doit être un nombre entier, pas une chaîne
 
 # Liste des sites sources pour la recherche d'événements tech
 EVENT_SOURCES = [
