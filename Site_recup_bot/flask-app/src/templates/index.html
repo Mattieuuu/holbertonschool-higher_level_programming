@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='navbar.css') }}">
+    <title>Liste des événements</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-placeholder"></div>
+        <div class="nav-links">
+            <a href="/holbylon" class="nav-link">Holbylon</a>
+            <a href="/events" class="nav-link active">Événements</a>
+            <a href="/discord" class="nav-link">Discord</a>
+            <a href="/about" class="nav-link">En savoir plus</a>
+        </div>
+    </nav>
+    <header>
+        <h1>Liste des événements</h1>
+    </header>
+    <main>
+        {% if events %}
+            <div class="events-container">
+                {% for event in events %}
+                    <div class="event">
+                        <a href="/delete/{{ loop.index0 }}" class="delete-btn" title="Supprimer">×</a>
+                        <h2>{{ event.name }}</h2>
+                        <div class="event-info">Date: {{ event.date }}</div>
+                        <div class="event-info">Lieu: {{ event.location }}</div>
+                        <div class="event-info">Lien: <a href="{{ event.link }}" target="_blank">{{ event.link }}</a></div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Aucun événement disponible</p>
+        {% endif %}
+        <a href="/add" class="add-btn">Ajouter un événement</a>
+    </main>
+</body>
+</html>

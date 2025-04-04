@@ -1,0 +1,19 @@
+Pour lancer le site :
+
+1. Assurez-vous d'être dans le dossier `/root/holbertonschool-higher_level_programming-1/Site_recup_bot/flask-app/src`
+
+2. Lancez la commande :
+
+python app.py
+
+
+3. Ouvrez votre navigateur et allez à l'adresse :
+
+http://localhost:5000
+
+
+Vous devriez voir la page d'accueil avec la liste des événements (vide au début) et un lien pour ajouter des événements.
+
+Note : Si vous rencontrez des problèmes, assurez-vous d'avoir installé Flask :
+
+pip install flask
