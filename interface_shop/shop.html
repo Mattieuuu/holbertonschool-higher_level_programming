@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boutique Florale</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="path_to_logo.png" alt="Logo" class="nav-logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">Produits</a></li>
+            <li><a href="#">Événementiel</a></li>
+            <li><a href="#">Entreprises</a></li>
+            <li><a href="#">Portfolio</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#" class="subscription-link">Abonnement</a></li>
+        </ul>
+        <div class="nav-icons">
+            <a href="#" class="cart-icon"><i class="fas fa-shopping-cart"></i></a>
+            <a href="#" class="profile-icon"><i class="fas fa-user-circle"></i></a>
+        </div>
+    </nav>
+
+    <div class="shop-container">
+        <aside class="sidebar-filters">
+            <div class="filter-section">
+                <h3>Recherche</h3>
+                <input type="text" placeholder="Rechercher un produit..." class="search-input" id="searchInput">
+            </div>
+
+            <div class="filter-section">
+                <h3>Catégories</h3>
+                <div class="filter-options">
+                    <label><input type="checkbox" value="fleurs" class="category-filter"> Fleurs fraîches</label>
+                    <label><input type="checkbox" value="seches" class="category-filter"> Fleurs séchées</label>
+                    <label><input type="checkbox" value="composition" class="category-filter"> Compositions</label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3>Prix</h3>
+                <div class="price-inputs">
+                    <input type="number" placeholder="Min" min="0" id="minPrice">
+                    <span>à</span>
+                    <input type="number" placeholder="Max" min="0" id="maxPrice">
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3>Couleurs (max 5)</h3>
+                <div class="color-selection">
+                    <input type="color" id="colorPicker" class="color-picker">
+                    <button id="addColor" class="add-color-btn">Ajouter</button>
+                    <button id="resetColors" class="reset-btn">Réinitialiser couleurs</button>
+                </div>
+                <div class="selected-colors">
+                    <!-- Les couleurs sélectionnées seront ajoutées ici -->
+                </div>
+                <p class="color-counter">0/5 couleurs sélectionnées</p>
+            </div>
+
+            <div class="filter-actions">
+                <button id="applyFilters" class="apply-filters-btn">Appliquer les filtres</button>
+                <button id="resetAllFilters" class="reset-all-btn">Réinitialiser tous les filtres</button>
+            </div>
+        </aside>
+
+        <main class="products-area">
+            <section class="category-section">
+                <h2>Fleurs fraîches</h2>
+                <div class="products-grid" id="fleurs">
+                    <!-- Produits fleurs -->
+                </div>
+            </section>
+
+            <section class="category-section">
+                <h2>Fleurs séchées</h2>
+                <div class="products-grid" id="seches">
+                    <!-- Produits fleurs séchées -->
+                </div>
+            </section>
+
+            <section class="category-section">
+                <h2>Compositions</h2>
+                <div class="products-grid" id="composition">
+                    <!-- Produits compositions -->
+                </div>
+            </section>
+
+            <script>
+                let selectedColors = [];
+                let allProducts = [];
+
+                window.onload = () => {
+                    allProducts = JSON.parse(localStorage.getItem('products') || '[]');
+                    displayProducts(allProducts);
+                    setupFilters();
+                };
+
+                function setupFilters() {
+                    // Gestion des couleurs
+                    const colorCounter = document.querySelector('.color-counter');
+                    const colorPicker = document.getElementById('colorPicker');
+                    const addColorBtn = document.getElementById('addColor');
+                    const resetColorsBtn = document.getElementById('resetColors');
+                    const selectedColorsDiv = document.querySelector('.selected-colors');
+                    
+                    // Ajout d'une couleur
+                    addColorBtn.addEventListener('click', () => {
+                        const color = colorPicker.value;
+
+                        if (selectedColors.includes(color)) {
+                            alert('Cette couleur est déjà sélectionnée');
+                            return;
+                        }
+
+                        if (selectedColors.length >= 5) {
+                            alert('Vous ne pouvez pas sélectionner plus de 5 couleurs');
+                            return;
+                        }
+
+                        selectedColors.push(color);
+                        updateSelectedColorsDisplay();
+                    });
+
+                    // Réinitialisation des couleurs
+                    resetColorsBtn.addEventListener('click', () => {
+                        selectedColors = [];
+                        updateSelectedColorsDisplay();
+                    });
+
+                    // Mise à jour de l'affichage des couleurs sélectionnées
+                    function updateSelectedColorsDisplay() {
+                        selectedColorsDiv.innerHTML = '';
+                        selectedColors.forEach(color => {
+                            const colorDiv = document.createElement('div');
+                            colorDiv.className = 'color-dot';
+                            colorDiv.style.background = color;
+                            colorDiv.title = color;
+
+                            // Suppression de la couleur au clic
+                            colorDiv.addEventListener('click', () => {
+                                selectedColors = selectedColors.filter(c => c !== color);
+                                updateSelectedColorsDisplay();
+                            });
+
+                            selectedColorsDiv.appendChild(colorDiv);
+                        });
+
+                        colorCounter.textContent = `${selectedColors.length}/5 couleurs sélectionnées`;
+                    }
+
+                    // Bouton d'application des filtres
+                    document.getElementById('applyFilters').addEventListener('click', applyFilters);
+                }
+
+                function applyFilters() {
+                    const searchText = document.getElementById('searchInput').value.toLowerCase();
+                    const selectedCategories = Array.from(document.querySelectorAll('.category-filter:checked')).map(cb => cb.value);
+                    const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
+                    const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+
+                    const filteredProducts = allProducts.filter(product => {
+                        // Filtrage par texte
+                        const matchesSearch = product.name.toLowerCase().includes(searchText);
+                        
+                        // Filtrage par catégorie
+                        const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
+                        
+                        // Filtrage par prix
+                        const matchesPrice = product.price >= minPrice && product.price <= maxPrice;
+                        
+                        // Filtrage par couleur
+                        const matchesColor = selectedColors.length === 0 || 
+                            product.colors.some(color => selectedColors.includes(color));
+
+                        return matchesSearch && matchesCategory && matchesPrice && matchesColor;
+                    });
+
+                    displayProducts(filteredProducts);
+                }
+
+                function displayProducts(products) {
+                    // Vider les conteneurs
+                    ['fleurs', 'seches', 'composition'].forEach(id => {
+                        document.getElementById(id).innerHTML = '';
+                    });
+
+                    products.forEach(product => {
+                        const productCard = `
+                            <div class="product-card">
+                                <h3>${product.name}</h3>
+                                <div class="product-colors">
+                                    ${product.colors.map(color => 
+                                        `<span class="color-dot" style="background: ${color}"></span>`
+                                    ).join('')}
+                                </div>
+                                <p class="product-price">${product.price} €</p>
+                                <button class="add-to-cart">Ajouter au panier</button>
+                            </div>
+                        `;
+
+                        const container = document.getElementById(product.category);
+                        if (container) {
+                            container.innerHTML += productCard;
+                        }
+                    });
+                }
+            </script>
+        </main>
+    </div>
+    <script src="shop.js"></script>
+</body>
+</html>
